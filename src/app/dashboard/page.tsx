@@ -134,64 +134,72 @@ export default function DashboardPage() {
                         >
                             <h2 className={styles.cardTitle}>🔍 スキルレーダー</h2>
                             <div className={styles.radarChart}>
-                                <svg viewBox="0 0 300 300" className={styles.radarSvg}>
-                                    {/* Background polygons */}
-                                    {[1, 0.75, 0.5, 0.25].map((scale) => (
-                                        <polygon
-                                            key={scale}
-                                            points={generatePolygonPoints(5, 130 * scale, 150)}
-                                            fill="none"
-                                            stroke="rgba(255,255,255,0.06)"
-                                            strokeWidth="1"
-                                        />
-                                    ))}
-                                    {/* Axes */}
-                                    {Array.from({ length: 5 }).map((_, i) => {
-                                        const angle = (i * 2 * Math.PI) / 5 - Math.PI / 2;
-                                        const x = 150 + 130 * Math.cos(angle);
-                                        const y = 150 + 130 * Math.sin(angle);
-                                        return (
-                                            <line key={i} x1="150" y1="150" x2={x} y2={y} stroke="rgba(255,255,255,0.04)" strokeWidth="1" />
-                                        );
-                                    })}
-                                    {/* Data polygon */}
-                                    <polygon
-                                        points={generateDataPoints(
-                                            skills.map((s) => s.confidence),
-                                            130,
-                                            150
-                                        )}
-                                        fill="rgba(250, 204, 21, 0.1)"
-                                        stroke="rgba(250, 204, 21, 0.6)"
-                                        strokeWidth="2"
-                                    />
-                                    {/* Data points */}
-                                    {skills.slice(0, 5).map((skill, i) => {
-                                        const angle = (i * 2 * Math.PI) / Math.max(skills.length, 5) - Math.PI / 2;
-                                        const r = skill.confidence * 130;
-                                        const x = 150 + r * Math.cos(angle);
-                                        const y = 150 + r * Math.sin(angle);
-                                        return <circle key={i} cx={x} cy={y} r="4" fill="#facc15" />;
-                                    })}
-                                </svg>
-                                {/* Labels */}
-                                <div className={styles.radarLabels}>
-                                    {skills.slice(0, 5).map((skill, i) => {
-                                        const angle = (i * 2 * Math.PI) / Math.max(skills.length, 5) - Math.PI / 2;
-                                        const labelR = 160;
-                                        const x = 50 + ((150 + labelR * Math.cos(angle)) / 300) * 100;
-                                        const y = 50 + ((150 + labelR * Math.sin(angle)) / 300) * 100;
-                                        return (
-                                            <span
-                                                key={skill.name}
-                                                className={styles.radarLabel}
-                                                style={{ left: `${x}%`, top: `${y}%` }}
-                                            >
-                                                {skill.name}
-                                            </span>
-                                        );
-                                    })}
-                                </div>
+                                {(() => {
+                                    const displaySkills = skills.slice(0, 5);
+                                    const sides = displaySkills.length || 5;
+                                    return (
+                                        <>
+                                            <svg viewBox="0 0 300 300" className={styles.radarSvg}>
+                                                {/* Background polygons */}
+                                                {[1, 0.75, 0.5, 0.25].map((scale) => (
+                                                    <polygon
+                                                        key={scale}
+                                                        points={generatePolygonPoints(sides, 130 * scale, 150)}
+                                                        fill="none"
+                                                        stroke="rgba(255,255,255,0.06)"
+                                                        strokeWidth="1"
+                                                    />
+                                                ))}
+                                                {/* Axes */}
+                                                {Array.from({ length: sides }).map((_, i) => {
+                                                    const angle = (i * 2 * Math.PI) / sides - Math.PI / 2;
+                                                    const x = 150 + 130 * Math.cos(angle);
+                                                    const y = 150 + 130 * Math.sin(angle);
+                                                    return (
+                                                        <line key={i} x1="150" y1="150" x2={x} y2={y} stroke="rgba(255,255,255,0.04)" strokeWidth="1" />
+                                                    );
+                                                })}
+                                                {/* Data polygon */}
+                                                <polygon
+                                                    points={generateDataPoints(
+                                                        displaySkills.map((s) => s.confidence),
+                                                        130,
+                                                        150
+                                                    )}
+                                                    fill="rgba(250, 204, 21, 0.1)"
+                                                    stroke="rgba(250, 204, 21, 0.6)"
+                                                    strokeWidth="2"
+                                                />
+                                                {/* Data points */}
+                                                {displaySkills.map((skill, i) => {
+                                                    const angle = (i * 2 * Math.PI) / sides - Math.PI / 2;
+                                                    const r = skill.confidence * 130;
+                                                    const x = 150 + r * Math.cos(angle);
+                                                    const y = 150 + r * Math.sin(angle);
+                                                    return <circle key={i} cx={x} cy={y} r="4" fill="#facc15" />;
+                                                })}
+                                            </svg>
+                                            {/* Labels */}
+                                            <div className={styles.radarLabels}>
+                                                {displaySkills.map((skill, i) => {
+                                                    const angle = (i * 2 * Math.PI) / sides - Math.PI / 2;
+                                                    const labelR = 155;
+                                                    const x = ((150 + labelR * Math.cos(angle)) / 300) * 100;
+                                                    const y = ((150 + labelR * Math.sin(angle)) / 300) * 100;
+                                                    return (
+                                                        <span
+                                                            key={skill.name}
+                                                            className={styles.radarLabel}
+                                                            style={{ left: `${x}%`, top: `${y}%` }}
+                                                        >
+                                                            {skill.name}
+                                                        </span>
+                                                    );
+                                                })}
+                                            </div>
+                                        </>
+                                    );
+                                })()}
                             </div>
                         </motion.div>
 
@@ -265,7 +273,7 @@ function generatePolygonPoints(sides: number, radius: number, center: number): s
 }
 
 function generateDataPoints(values: number[], maxRadius: number, center: number): string {
-    const sides = Math.max(values.length, 5);
+    const sides = values.length || 5;
     return Array.from({ length: sides })
         .map((_, i) => {
             const angle = (i * 2 * Math.PI) / sides - Math.PI / 2;
