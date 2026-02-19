@@ -39,29 +39,40 @@ export interface AnalysisResult {
 }
 
 const SYSTEM_PROMPT = `あなたはSkillMinerのAIスキルアナリストです。
-ユーザーの入力情報（スキル、経歴、趣味、SNS活動）を分析し、
-本人も気づいていない収益化可能なスキルを発見してください。
+ユーザーの入力情報（スキル、経歴、趣味、SNS活動）を深く分析し、
+本人も気づいていない「隠れた」収益化可能なスキルを発見してください。
+
+重要: 毎回異なるユニークな結果を返すこと。ユーザーのスキル・趣味・職種の
+「組み合わせ」から生まれる独自のスキルを発見してください。
+テクニカルライティングやオンライン教育のような一般的な提案は避け、
+そのユーザーだけの具体的でニッチなスキルを見つけてください。
+
+分析のアプローチ:
+1. スキルAとスキルBの「交差点」にあるユニークな能力を探す
+2. 趣味と職業スキルの意外な組み合わせから生まれる市場価値を発見
+3. 2024-2025年の最新の副業トレンドやAIツール活用を含める
+4. そのユーザーの具体的な経験に基づいた、説得力のある説明をする
 
 以下のJSON形式で回答してください：
 {
   "hiddenSkills": [
     {
-      "name": "スキル名",
-      "category": "カテゴリ (Tech/Creative/Business/Communication)",
-      "confidence": 0.85,
-      "description": "なぜこのスキルがあると分析したか",
+      "name": "具体的でユニークなスキル名（ユーザーの入力を反映）",
+      "category": "Tech/Creative/Business/Communication のいずれか",
+      "confidence": 0.70〜0.95の範囲でランダムに設定,
+      "description": "なぜこのスキルがあると分析したか（ユーザーの具体的な入力に言及すること）",
       "revenueEstimate": "月額推定収入 (例: ¥50,000〜¥150,000)",
       "demandLevel": "high/medium/low"
     }
   ],
   "matchedJobs": [
     {
-      "title": "案件名",
-      "company": "企業/プラットフォーム名",
-      "matchRate": 92,
-      "salary": "報酬レンジ (例: ¥30,000〜¥80,000/月)",
+      "title": "具体的な案件名",
+      "company": "実在するプラットフォーム名（ランサーズ、クラウドワークス、ココナラ、Fiverr等）",
+      "matchRate": 70〜98の範囲,
+      "salary": "報酬レンジ",
       "difficulty": "beginner/intermediate/advanced",
-      "description": "案件の説明",
+      "description": "案件の具体的な説明",
       "requiredSkills": ["必要スキル1", "必要スキル2"],
       "url": "#"
     }
@@ -78,12 +89,13 @@ const SYSTEM_PROMPT = `あなたはSkillMinerのAIスキルアナリストです
 }
 
 ルール:
-- hiddenSkillsは3〜5個発見すること
-- matchedJobsは4〜6個提案すること
-- roadmapは8週間分を提案すること
+- hiddenSkillsは4〜6個発見すること（毎回異なるスキルを提案）
+- matchedJobsは4〜6個提案すること（実在するプラットフォーム名を使う）
+- roadmapは8週間分を提案すること（最初に発見した最も収益性の高いスキルに焦点）
 - 日本語で回答すること
 - ニッチで競合の少ない案件を優先すること
-- 収益推定は現実的な金額にすること`;
+- 収益推定は現実的な金額にすること
+- confidenceの値は毎回バラつきを持たせること`;
 
 function generateMockAnalysis(
     skills: string[],
@@ -265,21 +277,24 @@ export async function analyzeSkills(
 
     try {
         const userPrompt = `
-以下のユーザー情報を分析して、隠れた収益化可能なスキルを発見してください：
+以下のユーザー情報を分析して、隠れた収益化可能なスキルを発見してください。
+前回と異なるユニークな結果を生成してください。（リクエストID: ${Date.now()}）
 
 職種: ${occupation}
 保有スキル: ${skills.join(", ")}
 趣味・興味: ${hobbies.join(", ")}
 ${snsData ? `SNSデータ: ${snsData}` : ""}
+
+上記のスキルと趣味の「意外な組み合わせ」から生まれるニッチなスキルに注目してください。
 `;
 
         const response = await openai.chat.completions.create({
-            model: "gpt-4",
+            model: "gpt-4o",
             messages: [
                 { role: "system", content: SYSTEM_PROMPT },
                 { role: "user", content: userPrompt },
             ],
-            temperature: 0.7,
+            temperature: 0.9,
             response_format: { type: "json_object" },
         });
 
