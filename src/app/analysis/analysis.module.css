@@ -1,0 +1,331 @@
+.page {
+    min-height: 100vh;
+    background: var(--bg-primary);
+    position: relative;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+    position: relative;
+    z-index: 1;
+}
+
+.header {
+    margin-bottom: 2rem;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* Mining Animation Screen */
+.miningScreen {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--gradient-hero);
+    padding: 2rem;
+}
+
+.miningOrb {
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle, rgba(250, 204, 21, 0.1), transparent);
+    border-radius: 50%;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.miningOrb::before {
+    content: "";
+    position: absolute;
+    inset: -10px;
+    border: 2px solid rgba(250, 204, 21, 0.15);
+    border-radius: 50%;
+    animation: spin 4s linear infinite;
+}
+
+.miningIcon {
+    font-size: 3.5rem;
+}
+
+.miningTitle {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.miningSubtitle {
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+.miningBarWrapper {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.miningPercent {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--gold-400);
+}
+
+.miningSteps {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.miningStep {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+}
+
+/* Results Header */
+.resultsHeader {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.badge {
+    display: inline-block;
+    padding: 0.5rem 1.25rem;
+    background: rgba(250, 204, 21, 0.08);
+    border: 1px solid rgba(250, 204, 21, 0.2);
+    border-radius: var(--radius-full);
+    color: var(--gold-300);
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.title {
+    font-family: var(--font-display);
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: 1.0625rem;
+}
+
+/* Sections */
+.section {
+    margin-bottom: 3rem;
+}
+
+.sectionTitle {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Skill Cards */
+.skillsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+}
+
+.skillCard {
+    padding: 1.5rem;
+}
+
+.skillHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+}
+
+.skillCategoryIcon {
+    font-size: 2rem;
+}
+
+.skillMeta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+}
+
+.demandBadge {
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.confidence {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.skillName {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.skillDesc {
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.skillRevenue {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: rgba(250, 204, 21, 0.05);
+    border-radius: var(--radius-md);
+    margin-bottom: 0.75rem;
+}
+
+.revenueLabel {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.revenueValue {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--gold-300);
+    font-size: 0.875rem;
+}
+
+.confidenceBar {
+    height: 3px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.confidenceFill {
+    height: 100%;
+    background: var(--gradient-gold);
+    border-radius: var(--radius-full);
+    transition: width 1s ease;
+}
+
+/* CTA */
+.ctaSection {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin: 3rem 0;
+}
+
+/* Roadmap */
+.roadmapGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+.roadmapCard {
+    padding: 1.25rem;
+    background: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-base);
+}
+
+.roadmapCard:hover {
+    border-color: rgba(168, 85, 247, 0.2);
+}
+
+.weekBadge {
+    display: inline-block;
+    padding: 0.25rem 0.625rem;
+    background: rgba(168, 85, 247, 0.1);
+    border-radius: var(--radius-full);
+    color: var(--purple-400);
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.roadmapTitle {
+    font-family: var(--font-display);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.roadmapDesc {
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+}
+
+.milestone {
+    font-size: 0.75rem;
+    color: var(--gold-300);
+    padding: 0.375rem 0.625rem;
+    background: rgba(250, 204, 21, 0.05);
+    border-radius: var(--radius-sm);
+}
+
+/* Empty State */
+.emptyState {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 2rem;
+}
+
+.emptyState h2 {
+    font-family: var(--font-display);
+    font-weight: 700;
+}
+
+.emptyState p {
+    color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 1.5rem;
+    }
+
+    .roadmapGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ctaSection {
+        flex-direction: column;
+        align-items: center;
+    }
+}

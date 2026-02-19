@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String       @id @default(cuid())
+  name          String?
+  email         String       @unique
+  password      String?
+  image         String?
+  skills        Skill[]
+  analyses      Analysis[]
+  snsProfiles   SnsProfile[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+
+model Skill {
+  id       String  @id @default(cuid())
+  name     String
+  category String
+  level    Int     @default(3)
+  isHidden Boolean @default(false)
+  userId   String
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Analysis {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  hiddenSkills String   @default("[]")
+  matchedJobs  String   @default("[]")
+  roadmap      String   @default("[]")
+  createdAt    DateTime @default(now())
+}
+
+model SnsProfile {
+  id          String @id @default(cuid())
+  platform    String
+  profileData String @default("{}")
+  userId      String
+  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
