@@ -31,6 +31,8 @@ export default function OnboardingPage() {
         linkedinUsername: "",
         customSkill: "",
         customHobby: "",
+        customLinks: [] as string[],
+        customLinkInput: "",
     });
     const [loading, setLoading] = useState(false);
 
@@ -57,6 +59,16 @@ export default function OnboardingPage() {
                 ...form,
                 hobbies: [...form.hobbies, form.customHobby.trim()],
                 customHobby: "",
+            });
+        }
+    };
+
+    const addCustomLink = () => {
+        if (form.customLinkInput.trim() && !form.customLinks.includes(form.customLinkInput.trim())) {
+            setForm({
+                ...form,
+                customLinks: [...form.customLinks, form.customLinkInput.trim()],
+                customLinkInput: "",
             });
         }
     };
@@ -331,6 +343,41 @@ export default function OnboardingPage() {
                                             onChange={(e) => setForm({ ...form, linkedinUsername: e.target.value })}
                                         />
                                     </div>
+                                </div>
+
+                                {/* Custom Links */}
+                                <div className={`glass-card ${styles.snsCard}`}>
+                                    <div className={styles.snsHeader}>
+                                        <span className={styles.snsIcon}>🔗</span>
+                                        <div>
+                                            <h3 className={styles.snsName}>カスタムリンク</h3>
+                                            <p className={styles.snsDesc}>YouTube、GitHub、ブログ、ポートフォリオなど</p>
+                                        </div>
+                                    </div>
+                                    <div className={styles.customInput}>
+                                        <input
+                                            className="input"
+                                            placeholder="https://..."
+                                            value={form.customLinkInput}
+                                            onChange={(e) => setForm({ ...form, customLinkInput: e.target.value })}
+                                            onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addCustomLink())}
+                                        />
+                                        <button className="btn btn-secondary" onClick={addCustomLink}>追加</button>
+                                    </div>
+                                    {form.customLinks.length > 0 && (
+                                        <div className={styles.selectedTags} style={{ marginTop: '0.75rem' }}>
+                                            {form.customLinks.map((link) => (
+                                                <span
+                                                    key={link}
+                                                    className="tag"
+                                                    onClick={() => setForm({ ...form, customLinks: form.customLinks.filter((l) => l !== link) })}
+                                                    style={{ cursor: "pointer", fontSize: '0.75rem' }}
+                                                >
+                                                    {link.length > 35 ? link.slice(0, 35) + '...' : link} ✕
+                                                </span>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
 
                                 <p className={styles.snsNote}>
