@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import styles from "./matching.module.css";
 
@@ -22,6 +22,7 @@ export default function MatchingPage() {
     const [jobs, setJobs] = useState<MatchedJob[]>([]);
     const [filter, setFilter] = useState("all");
     const [sortBy, setSortBy] = useState("matchRate");
+    const [selectedJob, setSelectedJob] = useState<MatchedJob | null>(null);
 
     useEffect(() => {
         const stored = sessionStorage.getItem("analysisResult");
@@ -29,7 +30,6 @@ export default function MatchingPage() {
             const data = JSON.parse(stored);
             setJobs(data.matchedJobs || []);
         } else {
-            // Fetch fresh
             fetch("/api/analyze", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -198,7 +198,11 @@ export default function MatchingPage() {
                                 ))}
                             </div>
 
-                            <button className="btn btn-primary" style={{ width: "100%", marginTop: "1rem" }}>
+                            <button
+                                className="btn btn-primary"
+                                style={{ width: "100%", marginTop: "1rem" }}
+                                onClick={() => setSelectedJob(job)}
+                            >
                                 詳細を見る →
                             </button>
                         </motion.div>
@@ -214,6 +218,104 @@ export default function MatchingPage() {
                     </div>
                 )}
             </div>
+
+            {/* Job Detail Modal */}
+            <AnimatePresence>
+                {selectedJob && (
+                    <motion.div
+                        className={styles.modalOverlay}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setSelectedJob(null)}
+                    >
+                        <motion.div
+                            className={styles.modalContent}
+                            initial={{ opacity: 0, scale: 0.9, y: 30 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 30 }}
+                            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <button className={styles.modalClose} onClick={() => setSelectedJob(null)}>✕</button>
+
+                            <div className={styles.modalHeader}>
+                                <div className={styles.modalMatchBadge}>
+                                    <svg width="80" height="80" viewBox="0 0 80 80">
+                                        <circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="5" />
+                                        <circle
+                                            cx="40" cy="40" r="34" fill="none"
+                                            stroke={selectedJob.matchRate >= 85 ? "#facc15" : selectedJob.matchRate >= 70 ? "#a855f7" : "#94a3b8"}
+                                            strokeWidth="5"
+                                            strokeDasharray={`${(selectedJob.matchRate / 100) * 213.6} 213.6`}
+                                            strokeLinecap="round"
+                                            transform="rotate(-90 40 40)"
+                                        />
+                                    </svg>
+                                    <span className={styles.modalMatchPercent}>{selectedJob.matchRate}%</span>
+                                </div>
+                                <div>
+                                    <h2 className={styles.modalTitle}>{selectedJob.title}</h2>
+                                    <p className={styles.modalCompany}>{selectedJob.company}</p>
+                                </div>
+                            </div>
+
+                            <div className={styles.modalBody}>
+                                <div className={styles.modalSection}>
+                                    <h3>📋 案件概要</h3>
+                                    <p>{selectedJob.description}</p>
+                                </div>
+
+                                <div className={styles.modalDetailsGrid}>
+                                    <div className={styles.modalDetailItem}>
+                                        <span className={styles.modalDetailLabel}>💰 報酬</span>
+                                        <span className={styles.modalDetailValue}>{selectedJob.salary}</span>
+                                    </div>
+                                    <div className={styles.modalDetailItem}>
+                                        <span className={styles.modalDetailLabel}>📊 難易度</span>
+                                        <span className={styles.modalDetailValue} style={{ color: difficultyColors[selectedJob.difficulty] }}>
+                                            {difficultyLabels[selectedJob.difficulty]}
+                                        </span>
+                                    </div>
+                                    <div className={styles.modalDetailItem}>
+                                        <span className={styles.modalDetailLabel}>🎯 マッチ率</span>
+                                        <span className={styles.modalDetailValue} style={{ color: "#facc15" }}>
+                                            {selectedJob.matchRate}%
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div className={styles.modalSection}>
+                                    <h3>🛠️ 必要スキル</h3>
+                                    <div className={styles.modalSkills}>
+                                        {selectedJob.requiredSkills.map((skill) => (
+                                            <span key={skill} className="tag">{skill}</span>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className={styles.modalSection}>
+                                    <h3>📝 応募のポイント</h3>
+                                    <ul className={styles.modalTips}>
+                                        <li>ポートフォリオや実績を準備しておくと採用率が上がります</li>
+                                        <li>まずは小さな案件から始めて実績を積みましょう</li>
+                                        <li>プロフィールに関連スキルを明記しましょう</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div className={styles.modalActions}>
+                                <button className="btn btn-primary" style={{ flex: 1 }}>
+                                    🚀 応募する
+                                </button>
+                                <button className="btn btn-secondary" onClick={() => setSelectedJob(null)}>
+                                    💾 保存する
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }
