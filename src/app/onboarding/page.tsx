@@ -30,6 +30,7 @@ export default function OnboardingPage() {
         twitterUsername: "",
         linkedinUsername: "",
         customSkill: "",
+        customHobby: "",
     });
     const [loading, setLoading] = useState(false);
 
@@ -46,6 +47,16 @@ export default function OnboardingPage() {
                 ...form,
                 skills: [...form.skills, form.customSkill.trim()],
                 customSkill: "",
+            });
+        }
+    };
+
+    const addCustomHobby = () => {
+        if (form.customHobby.trim() && !form.hobbies.includes(form.customHobby.trim())) {
+            setForm({
+                ...form,
+                hobbies: [...form.hobbies, form.customHobby.trim()],
+                customHobby: "",
             });
         }
     };
@@ -230,6 +241,34 @@ export default function OnboardingPage() {
                                     <span className={styles.stepIcon}>🎯</span>
                                     <h2 className={styles.stepTitle}>趣味・興味を教えてください</h2>
                                     <p className={styles.stepDesc}>趣味の中に収益化のヒントが隠れています</p>
+                                </div>
+
+                                {/* Selected hobbies */}
+                                {form.hobbies.length > 0 && (
+                                    <div className={styles.selectedTags}>
+                                        {form.hobbies.map((hobby) => (
+                                            <span
+                                                key={hobby}
+                                                className="tag"
+                                                onClick={() => setForm({ ...form, hobbies: form.hobbies.filter((h) => h !== hobby) })}
+                                                style={{ cursor: "pointer" }}
+                                            >
+                                                {hobby} ✕
+                                            </span>
+                                        ))}
+                                    </div>
+                                )}
+
+                                {/* Custom hobby input */}
+                                <div className={styles.customInput}>
+                                    <input
+                                        className="input"
+                                        placeholder="カスタム趣味を追加..."
+                                        value={form.customHobby}
+                                        onChange={(e) => setForm({ ...form, customHobby: e.target.value })}
+                                        onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addCustomHobby())}
+                                    />
+                                    <button className="btn btn-secondary" onClick={addCustomHobby}>追加</button>
                                 </div>
 
                                 <div className={styles.hobbyGrid}>
