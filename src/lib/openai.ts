@@ -90,7 +90,7 @@ const SYSTEM_PROMPT = `あなたはSkillMinerのAIスキルアナリストです
 
 ルール:
 - hiddenSkillsは4〜6個発見すること（毎回異なるスキルを提案）
-- matchedJobsは4〜6個提案すること（実在するプラットフォーム名を使う）
+- matchedJobsは8〜12個提案すること（実在するプラットフォーム名を使う）
 - roadmapは8週間分を提案すること（最初に発見した最も収益性の高いスキルに焦点）
 - 日本語で回答すること
 - ニッチで競合の少ない案件を優先すること
@@ -148,7 +148,7 @@ function generateMockAnalysis(
     const mockMatchedJobs: MatchedJob[] = [
         {
             title: "技術ブログ記事執筆",
-            company: "TechWrite Pro",
+            company: "ランサーズ",
             matchRate: 95,
             salary: "¥5,000〜¥30,000/記事",
             difficulty: "beginner",
@@ -158,7 +158,7 @@ function generateMockAnalysis(
         },
         {
             title: "Udemyコース制作パートナー",
-            company: "EduCreate Labs",
+            company: "ココナラ",
             matchRate: 88,
             salary: "¥100,000〜¥500,000/コース",
             difficulty: "intermediate",
@@ -168,7 +168,7 @@ function generateMockAnalysis(
         },
         {
             title: "業務効率化コンサルタント",
-            company: "OptimizeHub",
+            company: "クラウドワークス",
             matchRate: 84,
             salary: "¥50,000〜¥200,000/プロジェクト",
             difficulty: "intermediate",
@@ -178,7 +178,7 @@ function generateMockAnalysis(
         },
         {
             title: "データダッシュボード制作",
-            company: "DataViz Japan",
+            company: "Fiverr",
             matchRate: 81,
             salary: "¥30,000〜¥100,000/案件",
             difficulty: "beginner",
@@ -188,12 +188,62 @@ function generateMockAnalysis(
         },
         {
             title: "オンラインコミュニティ運営",
-            company: "Community First",
+            company: "ランサーズ",
             matchRate: 76,
             salary: "¥30,000〜¥80,000/月",
             difficulty: "beginner",
             description: `${hobbies[0] || "趣味"}関連のオンラインコミュニティのモデレーション・運営`,
             requiredSkills: ["コミュニケーション", "SNS運用"],
+            url: "#",
+        },
+        {
+            title: "AIツール活用アドバイザー",
+            company: "ストアカ",
+            matchRate: 91,
+            salary: "¥3,000〜¥10,000/回",
+            difficulty: "beginner",
+            description: `${occupation}向けのAIツール活用セミナー講師。ChatGPTなどの活用法を教えます`,
+            requiredSkills: ["AI知識", "プレゼンテーション"],
+            url: "#",
+        },
+        {
+            title: "SNSマーケティング代行",
+            company: "クラウドワークス",
+            matchRate: 79,
+            salary: "¥40,000〜¥150,000/月",
+            difficulty: "intermediate",
+            description: "企業のSNSアカウント運用代行。投稿企画からデータ分析まで",
+            requiredSkills: ["SNS運用", "マーケティング"],
+            url: "#",
+        },
+        {
+            title: "ノーコードアプリ開発",
+            company: "ココナラ",
+            matchRate: 85,
+            salary: "¥50,000〜¥300,000/案件",
+            difficulty: "intermediate",
+            description: `${skills[0] || "IT"}の知識を活かしたBubble/Glideでの業務アプリ制作`,
+            requiredSkills: ["ノーコード", "要件定義"],
+            url: "#",
+        },
+        {
+            title: "翻訳・ローカライゼーション",
+            company: "Gengo",
+            matchRate: 73,
+            salary: "¥2,000〜¥15,000/件",
+            difficulty: "beginner",
+            description: "技術文書やWebサイトの日英翻訳・ローカライゼーション",
+            requiredSkills: ["英語", "ライティング"],
+            url: "#",
+        },
+        {
+            title: "オンラインメンタリング",
+            company: "MENTA",
+            matchRate: 87,
+            salary: "¥5,000〜¥30,000/月",
+            difficulty: "beginner",
+            description: `${occupation}の経験を活かした初学者向けのメンタリング・学習サポート`,
+            requiredSkills: ["コミュニケーション", skills[0] || "専門知識"],
             url: "#",
         },
     ];
